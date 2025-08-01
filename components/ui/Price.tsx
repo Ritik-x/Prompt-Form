@@ -1,57 +1,80 @@
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "./card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./card";
 import { Button } from "./button";
-import { Label } from "./label";
+import { pricingPlan } from "@/lib/pricingplan";
+import { Badge } from "./badge";
 
 const Price = () => {
   return (
-    // <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 px-2">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full my-8 max-w-5xl">
-      {[1, 2, 3].map((item: number, index: number) => (
-        <Card
-          className="w-full max-w-sm flex flex-col justify-between rounded-2xl shadow-lg border border-gray-200 bg-white hover:shadow-2xl transition-shadow duration-300 mx-auto"
-          key={index}
-        >
-          <CardHeader className="pb-0 text-center">
-            <CardTitle className="text-2xl font-bold mb-1 text-gray-800">
-              Create Project
-            </CardTitle>
-            <CardDescription className="text-base text-gray-500 mb-2">
-              Deploy project in one click
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center py-6">
-            <div className="flex flex-col gap-6 w-full max-w-xs">
-              <div className="grid gap-2">
-                <Label className="text-gray-700 text-base">Name</Label>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-gray-700 text-base">Framework</Label>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex gap-3 pt-0 pb-6 px-6">
-            <Button
-              variant="outline"
-              className="w-1/2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+      {pricingPlan.map((plan, index) => {
+        const isEnterprise = plan.level === "Enterprice";
+        return (
+          <div key={index} className="relative flex flex-col items-center">
+            {plan.level === "Pro" && (
+              <Badge className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 bg-gradient-to-r from-black-800 to-gray-800 text-white shadow-lg px-4 py-1 rounded-full text-sm font-semibold border-2 border-white">
+                🔥 Popular
+              </Badge>
+            )}
+            <Card
+              className={`w-full max-w-sm flex flex-col justify-between rounded-2xl shadow-lg border transition-shadow duration-300 mx-auto pt-6
+                ${
+                  isEnterprise
+                    ? "bg-[#18181b] border-gray-700 text-white"
+                    : "bg-white border-gray-200 text-gray-800"
+                }
+                hover:shadow-2xl
+              `}
             >
-              Cancel
-            </Button>
-            <Button className="w-1/2 bg-gradient-to-r from-gray-600 to-black-600 text-white font-semibold hover:from-black-700 hover:to-gray-700 transition-colors">
-              Deploy
-            </Button>
-          </CardFooter>
-        </Card>
-      ))}
+              <CardHeader className="pb-0 text-center">
+                <CardTitle
+                  className={`text-2xl font-bold mb-1 mt-2 ${
+                    isEnterprise ? "text-white" : "text-gray-800"
+                  }`}
+                >
+                  {plan.level}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col justify-center items-center py-6">
+                <p
+                  className={`text-3xl font-extrabold mb-4 ${
+                    isEnterprise ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {plan.price}
+                </p>
+                <ul
+                  className={`space-y-2 w-full max-w-xs ${
+                    isEnterprise ? "text-gray-200" : "text-gray-700"
+                  }`}
+                >
+                  {plan.services.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <span className={`text-green-400`}>✔</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter className="flex gap-3 pt-0 pb-6 px-6">
+                <Button
+                  className={`w-full font-semibold transition-colors
+                    ${
+                      isEnterprise
+                        ? "bg-gradient-to-r  text-white border-gray-700 hover:text-black hover:bg-white"
+                        : "bg-gradient-to-r text-black border-gray-300 hover:bg-black hover:text-white"
+                    }
+                  `}
+                  variant={isEnterprise ? "default" : "outline"}
+                >
+                  Get Started with {plan.level}
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        );
+      })}
     </div>
-    // </div>
   );
 };
 

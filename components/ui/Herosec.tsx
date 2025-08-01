@@ -52,8 +52,6 @@ const Herosec = () => {
           </Button>
         ))}
       </div>
-
-      <Price />
     </section>
   );
 };
